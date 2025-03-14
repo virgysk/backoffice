@@ -90,20 +90,14 @@ CREATE TABLE parametros.codigos_transito (
 --------SCHEMA OPERACION------
 CREATE SCHEMA operacion;
 
-CREATE TABLE operacion.equipos (
-    id SERIAL PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    descripcion TEXT,
-    id_organismo INT REFERENCES parametros.organismos(id) ON DELETE SET NULL
-);
-
 CREATE TABLE operacion.agentes (
-    id SERIAL PRIMARY KEY,
-    id_usuario_fk BIGINT REFERENCES autenticacion.usuarios(id) ON DELETE CASCADE,
+    id_agente SERIAL PRIMARY KEY,
+    id_usuario_fk BIGINT REFERENCES autenticacion.usuarios(id_usuario) ON DELETE CASCADE,
     placa_ag VARCHAR(10) NOT NULL,
     firma TEXT,
     estado BOOLEAN DEFAULT TRUE
 );
+
 CREATE TABLE operacion.tipo_estado_infraccion (
     id_tipo VARCHAR(4) PRIMARY KEY,
     descripcion VARCHAR(30) NOT NULL
@@ -126,7 +120,7 @@ CREATE TABLE operacion.infracciones (
     fecha_tec_mecanica DATE,
     id_estado_fk INT REFERENCES operacion.estado_infraccion(id) ON DELETE SET NULL,
     id_organismo_fk INT REFERENCES parametros.organismos(id) ON DELETE SET NULL,
-    id_agente_fk INT REFERENCES operacion.agentes(id) ON DELETE SET NULL NULL,
+    id_agente_fk INT REFERENCES operacion.agentes(id_agente) ON DELETE SET NULL NULL,
     id_equipo INT REFERENCES operacion.equipos(id) ON DELETE SET NULL,
     fuente VARCHAR(20),
     fecha_validacion TIMESTAMP WITHOUT TIME ZONE,
@@ -136,6 +130,7 @@ CREATE TABLE operacion.infracciones (
 CREATE TABLE operacion.trazabilidad_infracciones (
     id SERIAL PRIMARY KEY,
     nro_infraccion_fk VARCHAR(20) REFERENCES operacion.infracciones(nro_infraccion) ON DELETE CASCADE,
+    id_usuario_fk BIGINT REFERENCES autenticacion.usuarios(id_usuario) ON DELETE SET NULL,
     estado_anterior INT REFERENCES operacion.estado_infraccion(id) ON DELETE SET NULL,
     estado_actual INT REFERENCES operacion.estado_infraccion(id) ON DELETE SET NULL,
     fecha_estado_actual TIMESTAMP WITHOUT TIME ZONE,
