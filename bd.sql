@@ -140,6 +140,7 @@ CREATE TABLE operacion.trazabilidad_infracciones (
 
 CREATE TABLE operacion.logos_organismo (
     id SERIAL PRIMARY KEY,
+    id_organismo_fk INT REFERENCES parametros.organismos(id) ON DELETE SET NULL,
     fecha_inicio DATE,
     fecha_fin DATE,
     url TEXT,
@@ -180,3 +181,10 @@ VALUES
 ('C35','NO REALIZAR LA REVISION TECNICOMECANICA Y DE EMISIONES CONTAMINANTES EN LOS SIGUIENTES PLAZOS O CUANDO AUN PORTANDO LOS CERTIFICADOS CORRESPONDIENTES NO CUENTAN CON LAS SIGUIENTES CONDICIONES TECNICOM',2),
 ('D02','CONDUCIR SIN PORTAR EL SEGURO OBLIGATORIO DE ACCIDENTES DE TRANSITO ORDENADO POR LA LEY. ADEMAS, EL VEHICULO SERA INMOVILIZADO.',1),
 ('D04','NO DETENERSE ANTE UNA LUZ ROJA O AMARILLA DE SEMAFORO,UNA SEÑAL DE PARE O UN SEMAFORO INTERMITENTE EN ROJO',1);
+
+
+INSERT into autenticacion.perfiles (nombre,descripcion)
+VALUES ('admin','Administradores'),('agente','Agentes de transito');
+
+INSERT INTO autenticacion.usuarios (id_usuario,nombres,apellidos,username,contrasena,id_perfil)
+VALUES(-10,'Admin','Admin','admin',md5('12345'),1);
